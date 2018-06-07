@@ -1,22 +1,38 @@
 {
-  "name": "db-sync",
+  "private": true,
+  "name": "data-sync",
   "version": "1.0.0",
-  "description": "",
+  "description": "Database migration and syncing tool for TwinePlatform",
   "main": "src/index.js",
   "bin": "bin/cli.js",
-  "scripts": {
-    "test": "jest"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwinePlatform/data-sync.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "contributors": [
+    "Elias Malik <elias@foundersandcoders.com>",
+    "Aisha Nasir <aisha@foundersandcoders.com>"
+  ],
+  "bugs": {
+    "url": "https://github.com/TwinePlatform/data-sync/issues"
+  },
+  "homepage": "https://github.com/TwinePlatform/data-sync#readme",
   "dependencies": {
     "knex": "^0.14.6",
-    "normalizr": "^3.2.4",
+    "minimist": "^1.2.0",
     "pg": "^7.4.3",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.9.1",
     "jest": "^23.1.0"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint ."
   }
 }
