@@ -61,5 +61,5 @@ module.exports = {
     id: 'feedback_id',
     feedback_date: 'feedback_created_at',
     feedback_score: 'feedback_score',
-  }
+  },
 };

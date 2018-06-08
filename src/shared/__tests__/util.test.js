@@ -1,9 +1,9 @@
-const { flattenObject } = require('../util')
+const { flattenObject } = require('../util');
 
 describe('Utility functions', () => {
   describe('flattenObject', () => {
     test('leaves an unnested object invariant', () => {
-      expect(flattenObject({ foo: 1 })).toEqual({ foo: 1 })
+      expect(flattenObject({ foo: 1 })).toEqual({ foo: 1 });
     });
 
     test('flattens a nested object using value path as key', () => {

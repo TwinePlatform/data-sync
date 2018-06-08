@@ -1,14 +1,34 @@
-const { pipe, toPairs, fromPairs, filter, apply } = require('ramda');
+const {
+  pipe, toPairs, fromPairs, filter, apply,
+} = require('ramda');
 
-const _ = module.exports = {}
 
-_.isPlainObject = (o) => typeof o === 'object' && !Array.isArray(o) && o !== null;
+const isPlainObject = (o) => typeof o === 'object' && !Array.isArray(o) && o !== null;
 
-_.flattenObject = (obj, prefix = '') =>
-  Object.keys(obj).reduce((acc, k) =>
-    _.isPlainObject(obj[k])
-      ? { ...acc, ..._.flattenObject(obj[k], k) }
-      : { ...acc, [`${[prefix, prefix ? '.' : ''].join('')}${k}`]: obj[k] }
-  , {});
+const flattenObject = (obj, prefix = '') =>
+  Object.keys(obj).reduce(
+    (acc, k) =>
+      isPlainObject(obj[k])
+        ? { ...acc, ...flattenObject(obj[k], k) }
+        : { ...acc, [`${[prefix, prefix ? '.' : ''].join('')}${k}`]: obj[k] }
+    , {}
+  );
 
-_.filterWithKeys = (pred) => pipe(toPairs, filter(apply(pred)), fromPairs);
+const filterWithKeys = (pred) => pipe(toPairs, filter(apply(pred)), fromPairs);
+
+// generateAliasString :: Object -> String
+const generateAliasString = (fieldMap) => {
+  const obj = flattenObject(fieldMap);
+  return Object
+    .keys(obj)
+    .reduce((acc, k) => acc.concat(`${k} AS ${obj[k]}`), [])
+    .join(', ');
+};
+
+
+module.exports = {
+  isPlainObject,
+  flattenObject,
+  filterWithKeys,
+  generateAliasString,
+};
