@@ -16,12 +16,14 @@ const flattenObject = (obj, prefix = '') =>
 
 const filterWithKeys = (pred) => pipe(toPairs, filter(apply(pred)), fromPairs);
 
+const escapeNumericFields = (s) => s.replace(/\.(\d+\w*)$/, (match, p1) => `."${p1}"`);
+
 // generateAliasString :: Object -> String
 const generateAliasString = (fieldMap) => {
   const obj = flattenObject(fieldMap);
   return Object
     .keys(obj)
-    .reduce((acc, k) => acc.concat(`${k} AS ${obj[k]}`), [])
+    .reduce((acc, k) => acc.concat(`${escapeNumericFields(k)} AS ${obj[k]}`), [])
     .join(', ');
 };
 
@@ -30,5 +32,6 @@ module.exports = {
   isPlainObject,
   flattenObject,
   filterWithKeys,
+  escapeNumericFields,
   generateAliasString,
 };
