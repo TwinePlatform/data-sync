@@ -35,5 +35,9 @@ describe('Utility functions', () => {
     test('generates aliasing select statement with escaped fields when columns start with numbers', () => {
       expect(generateAliasString({ foo: { '360_boo': 'hi' }, baz: { haz: 'lol' } })).toBe('foo."360_boo" AS hi, baz.haz AS lol');
     });
+
+    test('generates aliasing select statement with escaped fields when columns contain capital letters', () => {
+      expect(generateAliasString({ foo: { yearOfBirth: 'hi' }, baz: { haz: 'lol' } })).toBe('foo."yearOfBirth" AS hi, baz.haz AS lol');
+    });
   });
 });
