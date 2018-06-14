@@ -51,12 +51,13 @@ module.exports = {
     // OMITTED: sector_id          = Handled in JOIN
   },
   regions: {
-    name: 'region_name',
+    name: 'organisation_region',
   },
   sectors: {
-    name: 'sector_name',
+    name: 'organisation_sector',
   },
   users: {
+    id: 'user_id',
     name: 'user_name',
     email: 'user_email',
     password: 'user_password',
@@ -71,11 +72,62 @@ module.exports = {
     // OMITTED: gender_id = Handled in JOIN
     // OMITTED: role_id   = Handled in JOIN
   },
+  user_roles: {
+    name: 'user_role_name',
+  },
   meetings: {
+    id: 'outreach_meeting_id',
     partner: 'outreach_meeting_partner',
     date: 'outreach_meeting_scheduled_at',
+    user_id: 'outreach_meeting_to_user_fk',
     // OMITTED: type            = Handled in JOIN
     // OMITTED: user_id         = Handled in JOIN
     // OMITTED: organisation_id = Handled in JOIN
+  },
+  activities: {
+    id: 'volunteer_activity_id',
+    name: 'volunteer_activity_name',
+    created_at: 'volunteer_activity_created_at',
+    updated_at: 'volunteer_activity_modified_at',
+    deleted_at: 'volunteer_activity_deleted_at',
+  },
+  logs: {
+    id: 'volunteer_log_id',
+    user_id: 'volunteer_log_to_user_fk',
+    activity_id: 'volunteer_log_to_volunteer_activity_fk',
+    duration: 'volunteer_log_duration',
+    date_of_log: 'volunteer_log_created_at',
+    // OMITTED: organisation_id = Handled in JOIN
+  },
+  frontlinesms_api_keys: {
+    id: 'frontline_account_id',
+    key: 'frontline_account_api_key',
+    workspace_id: 'frontline_account_workspace_id',
+    // OMITTED: organisation_id = Handled in JOIN
+  },
+  outreaches: {
+    id: 'outreach_id',
+    date: 'outreach_scheduled_at',
+    interaction_type: 'outreach_interaction_type',
+    user_id: 'outreach_to_user_fk',
+    created_at: 'outreach_created_at',
+    updated_at: 'outreach_updated_at',
+    deleted_at: 'outreach_deleted_at',
+    // OMITTED: outreach_child_type = Handled in JOIN
+    // OMITTED: outreach_type       = Handled in JOIN
+    // OMITTED: organisation_id     = Handled in JOIN
+  },
+  outreach_types: {
+    name: 'outreach_type',
+    // OMITTED: created_at = Unimportant
+    // OMITTED: updated_at = Unimportant
+    // OMITTED: deleted_at = Unimportant
+  },
+  outreach_child_types: {
+    name: 'outreach_child_type',
+    // OMITTED: created_at = Unimportant
+    // OMITTED: updated_at = Unimportant
+    // OMITTED: deleted_at = Unimportant
+    // OMITTED: outreach_id = Unknown meaning
   },
 };
