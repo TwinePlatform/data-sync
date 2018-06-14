@@ -1,4 +1,6 @@
 # Database Migration Project Documentation
 
-## Contents
+## Contents
 * [Architecture](./architecture.md)
+* [Source Data Models](./source_data_models.md)
+* [Target Data Model](./target_data_model.md)
