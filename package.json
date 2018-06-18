@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/TwinePlatform/data-sync/issues"
   },
+  "jest": {
+    "coverageDirectory": "./coverage"
+  },
   "homepage": "https://github.com/TwinePlatform/data-sync#readme",
   "dependencies": {
     "knex": "^0.14.6",
@@ -33,6 +36,9 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "cover": "jest --coverage",
+    "cover:report": "jest --coverage"
   }
 }
