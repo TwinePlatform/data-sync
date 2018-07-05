@@ -19,8 +19,8 @@ const flattenObject = (obj, prefix = '') =>
 // filterWithKeys :: ((String, a) -> Boolean) -> Object -> Object
 const filterWithKeys = (pred) => pipe(toPairs, filter(apply(pred)), fromPairs);
 
-// generateAliasString :: Object -> String
-const generateAliasString = (fieldMap) => {
+// generateAliases :: Object -> String
+const generateAliases = (fieldMap) => {
   const obj = flattenObject(fieldMap);
   return Object
     .keys(obj)
@@ -32,5 +32,5 @@ module.exports = {
   isPlainObject,
   flattenObject,
   filterWithKeys,
-  generateAliasString,
+  generateAliases,
 };
