@@ -1,5 +1,5 @@
 const {
-  pipe, toPairs, fromPairs, filter, apply,
+  pipe, toPairs, fromPairs, filter, apply, curry, compose, assoc,
 } = require('ramda');
 
 
@@ -27,10 +27,35 @@ const generateAliases = (fieldMap) => {
     .reduce((acc, k) => acc.concat(`${k} AS ${obj[k]}`), []);
 };
 
+// mapKeys :: (k -> a) -> { k: v } -> { a: v }
+const mapKeys = curry((f, o) => Object.keys(o).reduce((acc, k) => assoc(f(k), o[k], acc), {}));
+
+// stripPrefix :: String -> { k: v } -> { k: v }
+const stripPrefix = (pref) => mapKeys((s) => s.startsWith('fk') ? s : s.replace(`${pref}_`, ''));
+
+// stripId :: { k: v } -> { k: v }
+const stripId = filterWithKeys((s) => !s.startsWith('id'));
+
+// sanitiseEntity :: String -> { k: v } -> { k: v }
+const sanitiseEntity = (prefix) => compose(
+  stripId,
+  stripPrefix(prefix),
+);
+
+// prefixColNames :: { k: v } -> { k: v }
+const prefixColNames = mapKeys((k) => ({
+  created_at: 'organisation.created_at',
+  modified_at: 'organisation.modified_at',
+  deleted_at: 'organisation.deleted_at',
+}[k] || k));
+
 
 module.exports = {
   isPlainObject,
   flattenObject,
   filterWithKeys,
   generateAliases,
+  sanitiseEntity,
+  mapKeys,
+  prefixColNames,
 };
