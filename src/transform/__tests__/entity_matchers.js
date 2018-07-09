@@ -87,7 +87,11 @@ describe('Entity Matchers', () => {
   describe('Visit Activity', () => {
     test('Always false', () => {
       [
-        { visit_activity_id: 1, fk_visit_activity_to_user: 2, fk_visit_activity_to_organisation: 3 },
+        {
+          visit_activity_id: 1,
+          fk_visit_activity_to_user: 2,
+          fk_visit_activity_to_organisation: 3,
+        },
         null,
         -1,
         '',
@@ -102,7 +106,11 @@ describe('Entity Matchers', () => {
   describe('Visit Feedback', () => {
     test('Always false', () => {
       [
-        { visit_feedback_id: 1, fk_visit_feedback_to_user: 2, fk_visit_feedback_to_organisation: 3 },
+        {
+          visit_feedback_id: 1,
+          fk_visit_feedback_to_user: 2,
+          fk_visit_feedback_to_organisation: 3,
+        },
         null,
         -1,
         '',

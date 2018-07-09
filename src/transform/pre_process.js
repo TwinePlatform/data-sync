@@ -221,10 +221,12 @@ const mapToTargetSchema = (entities) => {
 
         if (re.test(org.organisation_name)) {
           org.organisation_region = regionMap[orgRegex];
-        } else {
-          org.organisation_region = null;
         }
       });
+
+      if (!org.hasOwnProperty('organisation_region')) {
+        org.organisation_region = null;
+      }
     }
 
     // Organisations without sectors
