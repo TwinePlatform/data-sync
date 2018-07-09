@@ -132,6 +132,12 @@ const mapConstantValues = (entities) => {
       default:
         break;
     }
+
+    // Organisations with bad sector names
+    // > Some organisations from the visitor app have bad sector names
+    if (org.organisation_sector === 'pub') {
+      org.organisation_sector = 'Community pub, shop or café';
+    }
   });
 
   entities.user.forEach((user) => {
@@ -235,16 +241,10 @@ const mapToTargetSchema = (entities) => {
       org.organisation_sector = 'Community hub, facility or space';
     }
 
-    // Organisations with bad sector names
-    // > Some organisations from the visitor app have bad sector names
-    if (org.organisation_sector === 'pub') {
-      org.organisation_sector = 'Community pub, shop or café';
-    }
-
     // Duplicated 360Giving IDs
     // > One organisation is signed up twice on the admin app with the same 360 ID
     // > Set the ID to null on the organisation that will be removed
-    if (org.organisation_name === 'Homebaked') {
+    if (org.organisation_name === process.env.DUPLICATED_360_GIVING_ID_ORGANISATION_NAME) {
       org.organisation_360_giving_id = null;
     }
 

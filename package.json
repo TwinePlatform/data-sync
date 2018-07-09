@@ -43,7 +43,6 @@
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "cover": "jest --coverage",
-    "cover:report": "jest --coverage"
+    "cover": "jest --coverage"
   }
 }

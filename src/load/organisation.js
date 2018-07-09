@@ -12,12 +12,14 @@ const { sanitiseEntity, mapKeys } = require('../shared/util');
 
 const isFloat = (n) => n && !Number.isNaN(Number.parseFloat(n));
 
+const latLngToCoordinates = ({ lat, lng, ...o }) =>
+  ({
+    ...o,
+    coordinates: (lat && lng && isFloat(lat) && isFloat(lng)) ? { lng, lat } : null,
+  });
+
 const sanitiseOrg = compose(
-  ({ lat, lng, ...o }) =>
-    ({
-      ...o,
-      coordinates: (lat && lng && isFloat(lat) && isFloat(lng)) ? { lng, lat } : null,
-    }),
+  latLngToCoordinates,
   sanitiseEntity('organisation'),
 );
 

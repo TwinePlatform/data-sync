@@ -202,6 +202,28 @@ describe('mapConstantValues', () => {
     });
   });
 
+  test('maps bad organisation sector to required value', () => {
+    const entities = {
+      organisation: [
+        { organisation_sector: 'pub' },
+        { organisation_sector: 'Other' },
+        { organisation_sector: null },
+      ],
+      user: [],
+    };
+
+    const res = mapConstantValues(entities);
+
+    expect(res).toEqual({
+      organisation: [
+        { organisation_sector: 'Community pub, shop or café' },
+        { organisation_sector: 'Other' },
+        { organisation_sector: null },
+      ],
+      user: [],
+    });
+  });
+
   test('maps user roles to required values', () => {
     const entities = {
       organisation: [],
@@ -305,5 +327,48 @@ describe('mapToTargetSchema', () => {
         fk_user_to_organisation: 1,
       },
     ]);
+  });
+
+  test('Correct erroneous values', () => {
+    const entities = {
+      organisation: [
+        { organisation_name: process.env.DUPLICATED_360_GIVING_ID_ORGANISATION_NAME, organisation_360_giving_id: '0' },
+        { organisation_sector: null },
+      ],
+      user: [
+        { user_phone_number: '1111111111111111111111', user_birth_year: 0 },
+        { user_id: 0, user_email: process.env.ANONYMOUS_USERS_DUPLICATE_EMAIL },
+        { user_name: 'random visitor', user_email: 'twinesocialbizintel@gmail.com' },
+      ],
+    };
+
+    const res = mapToTargetSchema(entities);
+
+    expect(res).toEqual({
+      organisation: [
+        {
+          organisation_name: process.env.DUPLICATED_360_GIVING_ID_ORGANISATION_NAME,
+          organisation_360_giving_id: null,
+          organisation_region: null,
+          organisation_sector: 'Community hub, facility or space',
+        },
+        {
+          organisation_360_giving_id: null,
+          organisation_region: null,
+          organisation_sector: 'Community hub, facility or space',
+        },
+      ],
+      user: [
+        {
+          user_phone_number: '11111111111111111111', user_birth_year: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+        },
+        {
+          user_id: 0, user_email: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+        },
+        {
+          user_name: 'random visitor', user_email: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+        },
+      ],
+    });
   });
 });
