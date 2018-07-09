@@ -269,6 +269,18 @@ const mapToTargetSchema = (entities) => {
       user.user_gender = 'prefer not to say';
     }
 
+    // User disability
+    // > Default to "prefer not to say"
+    if (!user.hasOwnProperty('user_disability') || user.user_disability === null || typeof user.user_disability !== 'string') {
+      user.user_disability = 'prefer not to say';
+    }
+
+    // User ethnicity
+    // > Defaut to "prefer not to say"
+    if (!user.hasOwnProperty('user_ethnicity') || user.user_ethnicity === null || typeof user.user_ethnicity !== 'string') {
+      user.user_ethnicity = 'prefer not to say';
+    }
+
     // User phone number
     // > Truncate overly long phone numbers
     if (user.hasOwnProperty('user_phone_number') && user.user_phone_number.length > 20) {

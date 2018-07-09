@@ -16,7 +16,7 @@ const sanitiseUser = sanitiseEntity('user');
 
 const getUser = compose(
   mapKeys((k) => ({ password: 'user_password', name: 'user_name' }[k] || k)),
-  omit(['role_name', 'gender', 'fk_user_to_organisation'])
+  omit(['role_name', 'gender', 'disability', 'ethnicity', 'fk_user_to_organisation'])
 );
 
 const findUserById = (id, users) => compose(
@@ -39,6 +39,8 @@ const main = (primary, trx) =>
         .insert({
           ...user,
           gender_id: trx('gender').select('gender_id').where({ gender_name: u.gender }),
+          disability_id: trx('disability').select('disability_id').where({ disability_name: u.disability }),
+          ethnicity_id: trx('ethnicity').select('ethnicity_id').where({ ethnicity_name: u.ethnicity }),
         })
         .returning('user_account_id');
 

@@ -324,6 +324,8 @@ describe('mapToTargetSchema', () => {
         user_gender: 'prefer not to say',
         user_created_at: 'now',
         user_role_name: 'ORG_ADMIN',
+        user_disability: 'prefer not to say',
+        user_ethnicity: 'prefer not to say',
         fk_user_to_organisation: 1,
       },
     ]);
@@ -360,13 +362,28 @@ describe('mapToTargetSchema', () => {
       ],
       user: [
         {
-          user_phone_number: '11111111111111111111', user_birth_year: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+          user_phone_number: '11111111111111111111',
+          user_birth_year: null,
+          user_gender: 'prefer not to say',
+          user_role_name: 'VISITOR',
+          user_disability: 'prefer not to say',
+          user_ethnicity: 'prefer not to say',
         },
         {
-          user_id: 0, user_email: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+          user_id: 0,
+          user_email: null,
+          user_gender: 'prefer not to say',
+          user_role_name: 'VISITOR',
+          user_disability: 'prefer not to say',
+          user_ethnicity: 'prefer not to say',
         },
         {
-          user_name: 'random visitor', user_email: null, user_gender: 'prefer not to say', user_role_name: 'VISITOR',
+          user_name: 'random visitor',
+          user_email: null,
+          user_gender: 'prefer not to say',
+          user_role_name: 'VISITOR',
+          user_disability: 'prefer not to say',
+          user_ethnicity: 'prefer not to say',
         },
       ],
     });
