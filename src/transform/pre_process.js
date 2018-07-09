@@ -84,7 +84,7 @@ const removeTestData = (entities) => {
 
   // Additional filtering on visit_event records
   entities.visit_event = entities.visit_event
-    .filter((e) => e.visit_event_id !== 155) // Ignored: this is a visit to a real CB made by a test account
+    .filter((e) => e.visit_event_id !== 155) // Ignored: visit to real CB made by test account
     .map(omit(['fk_visit_event_to_organisation'])); // filter out foreign key b/c not part of new data model
 
   return entities;

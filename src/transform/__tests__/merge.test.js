@@ -233,7 +233,8 @@ describe('Merge', () => {
     expect(typeof result.organisation[0].organisation_id).toBe('string');
     expect(result.user).toHaveLength(1);
     expect(result.user[0].fk_user_to_organisation).toBe(result.organisation[0].organisation_id);
-    expect(result.visit_event[0].fk_visit_event_to_organisation).toBe(result.organisation[0].organisation_id);
     expect(result.visit_event[0].fk_visit_event_to_user).toBe(result.user[0].user_id);
+    expect(result.visit_event[0].fk_visit_event_to_organisation)
+      .toBe(result.organisation[0].organisation_id);
   });
 });

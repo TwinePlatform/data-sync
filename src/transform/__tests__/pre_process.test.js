@@ -153,10 +153,14 @@ describe('replaceKeysWithUUIDs', () => {
     expect(result.user[0].fk_user_to_organisation).toBe(result.organisation[1].organisation_id);
     expect(result.user[1].fk_user_to_organisation).toBe(result.organisation[0].organisation_id);
 
-    expect(result.visit_event[0].fk_visit_event_to_organisation).toBe(result.organisation[1].organisation_id);
-    expect(result.visit_event[1].fk_visit_event_to_organisation).toBe(result.organisation[0].organisation_id);
-    expect(result.visit_event[2].fk_visit_event_to_organisation).toBe(result.organisation[0].organisation_id);
-    expect(result.visit_event[3].fk_visit_event_to_organisation).toBe(result.organisation[1].organisation_id);
+    expect(result.visit_event[0].fk_visit_event_to_organisation)
+      .toBe(result.organisation[1].organisation_id);
+    expect(result.visit_event[1].fk_visit_event_to_organisation)
+      .toBe(result.organisation[0].organisation_id);
+    expect(result.visit_event[2].fk_visit_event_to_organisation)
+      .toBe(result.organisation[0].organisation_id);
+    expect(result.visit_event[3].fk_visit_event_to_organisation)
+      .toBe(result.organisation[1].organisation_id);
 
     expect(result.visit_event[0].fk_visit_event_to_user).toBe(result.user[0].user_id);
     expect(result.visit_event[1].fk_visit_event_to_user).toBe(result.user[1].user_id);

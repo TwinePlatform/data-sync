@@ -18,8 +18,9 @@ const main = (primary, trx) =>
   Promise.all(primary.visit_feedback
     .map(sanitiseVisitFeedback)
     .map((f) => {
+      const fk = f.fk_visit_feedback_to_organisation;
       const feedback = getVisitFeedback(f);
-      const org = prefixColNames(findOrgById(f.fk_visit_feedback_to_organisation, primary.organisation));
+      const org = prefixColNames(findOrgById(fk, primary.organisation));
 
       return trx('visit_feedback')
         .insert({

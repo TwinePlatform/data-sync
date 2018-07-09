@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine#1.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",

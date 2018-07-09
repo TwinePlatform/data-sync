@@ -13,6 +13,8 @@ install:
   - npm install -g codecov
   - npm install
 
+before_script:
+  - echo "module.exports = {};" > ./src/transform/region_map.js
 
 script:
   - npm run lint

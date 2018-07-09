@@ -15,7 +15,8 @@ const main = (primary, trx) =>
   Promise.all(zip(primary.outreach_campaign, primary.outreach_meeting)
     .map(([c, m]) => [sanitiseEntity('outreach_campaign')(c), sanitiseEntity('outreach_meeting')(m)])
     .map(async ([c, m]) => {
-      const org = prefixColNames(findOrgById(c.fk_outreach_campaign_to_organisation, primary.organisation));
+      const fk = c.fk_outreach_campaign_to_organisation;
+      const org = prefixColNames(findOrgById(fk, primary.organisation));
       const user = findUserById(m.fk_outreach_meeting_to_user, primary.user);
 
       const res = await trx('outreach_campaign')

@@ -31,8 +31,9 @@ const main = (primary, trx) =>
   Promise.all(primary.visit_activity
     .map(sanitiseVisitActivity)
     .map(async (a) => {
+      const fk = a.fk_visit_activity_to_organisation;
       const act = getVisitActivity(a);
-      const org = prefixColNames(findOrgById(a.fk_visit_activity_to_organisation, primary.organisation));
+      const org = prefixColNames(findOrgById(fk, primary.organisation));
 
       return trx('visit_activity')
         .insert({

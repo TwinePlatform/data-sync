@@ -17,9 +17,10 @@ const main = (primary, trx) =>
   Promise.all(primary.volunteer_log
     .map(sanitiseEntity('volunteer_log'))
     .map(async (l) => {
+      const fk = l.fk_volunteer_log_to_organisation;
       const log = getVolunteerLog(l);
       const user = findUserById(l.fk_volunteer_log_to_user, primary.user);
-      const org = prefixColNames(findOrgById(l.fk_volunteer_log_to_organisation, primary.organisation));
+      const org = prefixColNames(findOrgById(fk, primary.organisation));
 
       if (Object.keys(user).length === 0) {
         console.log('No user found', l.fk_volunteer_log_to_user);
