@@ -1,3 +1,12 @@
+/*
+ * Entity Matchers
+ *
+ * Functions that determine whether two entities should be merged in the merge
+ * algorithm (see /src/transform/merge.js)
+ *
+ * NOTE: these functions are non-trivial only for those entities that exist in
+ * both source databases (which is just organisations and users)
+ */
 const Levenshtein = require('fast-levenshtein');
 
 
@@ -43,7 +52,6 @@ module.exports = {
   visit_event: {
     doMatch: () => false,
   },
-
   outreach_campaign: {
     doMatch: () => false,
   },
