@@ -1,4 +1,4 @@
-const { flattenObject, generateAliases } = require('../util');
+const { flattenObject, generateAliases, sanitiseEntity } = require('../util');
 
 describe('Utility functions', () => {
   describe('flattenObject', () => {
@@ -18,6 +18,37 @@ describe('Utility functions', () => {
 
     test('generates aliasing select statement using given object', () => {
       expect(generateAliases({ foo: { yar: 'far' }, baz: { haz: 'lol' } })).toEqual(['foo.yar AS far', 'baz.haz AS lol']);
+    });
+  });
+
+  describe('sanitiseEntity', () => {
+    test('strips given prefix from object keys, leaving non-prefixed keys', () => {
+      const fn = sanitiseEntity('foo');
+
+      const res = fn({
+        foo_bar: 1, foo_baz: 2, lol: 3, fk_bop: 4,
+      });
+
+      expect(res).toEqual({
+        bar: 1,
+        baz: 2,
+        lol: 3,
+        fk_bop: 4,
+      });
+    });
+
+    test('strips "id" key, leaving all other keys', () => {
+      const fn = sanitiseEntity('foo');
+
+      const res = fn({
+        foo_id: 2, foo_bar: 1, foo_baz: 2, lol: 3,
+      });
+
+      expect(res).toEqual({
+        bar: 1,
+        baz: 2,
+        lol: 3,
+      });
     });
   });
 });
