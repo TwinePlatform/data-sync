@@ -21,24 +21,28 @@
   },
   "homepage": "https://github.com/TwinePlatform/data-sync#readme",
   "dependencies": {
+    "dotenv": "^6.0.0",
+    "fast-levenshtein": "^2.0.6",
     "knex": "^0.14.6",
     "minimist": "^1.2.0",
+    "mysql": "^2.15.0",
     "pg": "^7.4.3",
-    "ramda": "^0.25.0"
+    "ramda": "^0.25.0",
+    "uuid": "^3.3.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine",
+    "eslint-config-twine": "github:TwinePlatform/eslint-config-twine#1.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
     "jest": "^23.1.0"
   },
   "scripts": {
+    "start": "node bin/cli.js",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "cover": "jest --coverage",
-    "cover:report": "jest --coverage"
+    "cover": "jest --coverage"
   }
 }

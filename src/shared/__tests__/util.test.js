@@ -1,4 +1,4 @@
-const { flattenObject, escapeNumericFields, generateAliasString } = require('../util');
+const { flattenObject, generateAliases, sanitiseEntity } = require('../util');
 
 describe('Utility functions', () => {
   describe('flattenObject', () => {
@@ -11,33 +11,44 @@ describe('Utility functions', () => {
     });
   });
 
-  describe('escapeNumericFields', () => {
-    test('leaves non-numeric fields unchanged', () => {
-      expect(escapeNumericFields('boo.bar')).toBe('boo.bar');
-    });
-    test('leaves fields not starting with a number unchanged', () => {
-      expect(escapeNumericFields('boo.bar1')).toBe('boo.bar1');
-    });
-    test('escapes fields starting with numbers using double quotes', () => {
-      expect(escapeNumericFields('boo.1bar')).toBe('boo."1bar"');
-    });
-  });
-
-  describe('generateAliasString', () => {
-    test('generates empty string given an empty object', () => {
-      expect(generateAliasString({})).toBe('');
+  describe('generateAliases', () => {
+    test('generates empty array given an empty object', () => {
+      expect(generateAliases({})).toEqual([]);
     });
 
     test('generates aliasing select statement using given object', () => {
-      expect(generateAliasString({ foo: { yar: 'far' }, baz: { haz: 'lol' } })).toBe('foo.yar AS far, baz.haz AS lol');
+      expect(generateAliases({ foo: { yar: 'far' }, baz: { haz: 'lol' } })).toEqual(['foo.yar AS far', 'baz.haz AS lol']);
+    });
+  });
+
+  describe('sanitiseEntity', () => {
+    test('strips given prefix from object keys, leaving non-prefixed keys', () => {
+      const fn = sanitiseEntity('foo');
+
+      const res = fn({
+        foo_bar: 1, foo_baz: 2, lol: 3, fk_bop: 4,
+      });
+
+      expect(res).toEqual({
+        bar: 1,
+        baz: 2,
+        lol: 3,
+        fk_bop: 4,
+      });
     });
 
-    test('generates aliasing select statement with escaped fields when columns start with numbers', () => {
-      expect(generateAliasString({ foo: { '360_boo': 'hi' }, baz: { haz: 'lol' } })).toBe('foo."360_boo" AS hi, baz.haz AS lol');
-    });
+    test('strips "id" key, leaving all other keys', () => {
+      const fn = sanitiseEntity('foo');
 
-    test('generates aliasing select statement with escaped fields when columns contain capital letters', () => {
-      expect(generateAliasString({ foo: { yearOfBirth: 'hi' }, baz: { haz: 'lol' } })).toBe('foo."yearOfBirth" AS hi, baz.haz AS lol');
+      const res = fn({
+        foo_id: 2, foo_bar: 1, foo_baz: 2, lol: 3,
+      });
+
+      expect(res).toEqual({
+        bar: 1,
+        baz: 2,
+        lol: 3,
+      });
     });
   });
 });

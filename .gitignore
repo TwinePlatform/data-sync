@@ -70,3 +70,6 @@ Thumbs.db
 
 # local vs code settigns
 .vscode
+build
+
+**/region_map.js
