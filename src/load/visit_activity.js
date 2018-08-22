@@ -38,9 +38,8 @@ const main = (primary, trx) =>
       return trx('visit_activity')
         .insert({
           ...act,
-          community_business_id: trx('community_business')
-            .select('community_business_id')
-            .innerJoin('organisation', 'organisation.organisation_id', 'community_business.organisation_id')
+          organisation_id: trx('organisation')
+            .select('organisation_id')
             .where(org),
         });
     }));

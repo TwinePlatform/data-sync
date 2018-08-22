@@ -32,7 +32,7 @@ const main = (primary, trx) =>
           ...log,
           volunteer_activity_id: trx('volunteer_activity').select('volunteer_activity_id').where({ volunteer_activity_name: l.activity }),
           user_account_id: trx('user_account').select('user_account_id').where(user),
-          community_business_id: trx('community_business').select('community_business_id').innerJoin('organisation', 'organisation.organisation_id', 'community_business.organisation_id').where(org),
+          organisation_id: trx('organisation').select('organisation_id').where(org),
         });
     }));
 
