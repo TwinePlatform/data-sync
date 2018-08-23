@@ -7,8 +7,10 @@
 const {
   compose, omit, filter, head, map,
 } = require('ramda');
-const { prefixColNames, sanitiseEntity, mapKeys } = require('../shared/util');
-const { findOrgById } = require('./organisation');
+const {
+  prefixColNames, sanitiseEntity, mapKeys, log,
+} = require('../shared/util');
+const { tryFindOrgById } = require('./organisation');
 
 
 const sanitiseVisitActivity = sanitiseEntity('visit_activity');
@@ -33,14 +35,19 @@ const main = (primary, trx) =>
     .map(async (a) => {
       const fk = a.fk_visit_activity_to_organisation;
       const act = getVisitActivity(a);
-      const org = prefixColNames(findOrgById(fk, primary.organisation));
+      const org = tryFindOrgById(fk, primary.organisation);
+
+      if (org === null) {
+        log('No organisation found for visit activity', a);
+        return Promise.resolve();
+      }
 
       return trx('visit_activity')
         .insert({
           ...act,
           organisation_id: trx('organisation')
             .select('organisation_id')
-            .where(org),
+            .where(prefixColNames(org)),
         });
     }));
 

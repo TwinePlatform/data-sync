@@ -6,10 +6,10 @@
  * - subscription
  */
 const {
-  compose, omit, tryCatch, always,
+  compose, omit,
 } = require('ramda');
-const { sanitiseEntity, mapKeys } = require('../shared/util');
-const { findOrgById } = require('./organisation');
+const { sanitiseEntity, mapKeys, log } = require('../shared/util');
+const { tryFindOrgById } = require('./organisation');
 
 
 const sanitiseFrontlineAccount = sanitiseEntity('frontline_account');
@@ -19,7 +19,6 @@ const getFrontlineAccount = compose(
   omit(['fk_frontline_account_to_organisation'])
 );
 
-const tryFindOrgById = tryCatch(findOrgById, always(null));
 
 const main = (primary, trx) =>
   Promise.all(primary.frontline_account
@@ -29,8 +28,7 @@ const main = (primary, trx) =>
       const org = tryFindOrgById(f.fk_frontline_account_to_organisation, primary.organisation);
 
       if (org === null) {
-        console.log('No organisation found for', frontline);
-        console.log(f);
+        log('No organisation found for frontline account', f);
         return Promise.resolve();
       }
 

@@ -8,8 +8,8 @@
 const {
   map, head, filter, compose, omit,
 } = require('ramda');
-const { sanitiseEntity, mapKeys } = require('../shared/util');
-const { findOrgById } = require('./organisation');
+const { sanitiseEntity, mapKeys, log } = require('../shared/util');
+const { tryFindOrgById } = require('./organisation');
 
 
 const sanitiseUser = sanitiseEntity('user');
@@ -32,8 +32,13 @@ const main = (primary, trx) =>
     .map(sanitiseUser)
     .map(async (u) => {
       const role = u.role_name;
-      const org = findOrgById(u.fk_user_to_organisation, primary.organisation);
       const user = getUser(u);
+      const org = tryFindOrgById(u.fk_user_to_organisation, primary.organisation);
+
+      if (org === null) {
+        log('No organisation found for user', u);
+        return Promise.resolve();
+      }
 
       const res = await trx('user_account')
         .insert({

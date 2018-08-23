@@ -4,11 +4,9 @@
  * Populates the following tables:
  * - visit_feedback
  */
-const {
-  pickAll,
-} = require('ramda');
-const { sanitiseEntity, prefixColNames } = require('../shared/util');
-const { findOrgById } = require('./organisation');
+const { pickAll } = require('ramda');
+const { sanitiseEntity, prefixColNames, log } = require('../shared/util');
+const { tryFindOrgById } = require('./organisation');
 
 
 const sanitiseVisitFeedback = sanitiseEntity('visit_feedback');
@@ -20,14 +18,19 @@ const main = (primary, trx) =>
     .map((f) => {
       const fk = f.fk_visit_feedback_to_organisation;
       const feedback = getVisitFeedback(f);
-      const org = prefixColNames(findOrgById(fk, primary.organisation));
+      const org = tryFindOrgById(fk, primary.organisation);
+
+      if (org === null) {
+        log('No organisation found for feedback', f);
+        return Promise.resolve();
+      }
 
       return trx('visit_feedback')
         .insert({
           ...feedback,
           organisation_id: trx('organisation')
             .select('organisation_id')
-            .where(org),
+            .where(prefixColNames(org)),
         });
     }));
 

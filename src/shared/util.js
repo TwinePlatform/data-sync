@@ -53,6 +53,11 @@ const prefixColNames = mapKeys((k) => ({
   deleted_at: 'organisation.deleted_at',
 }[k] || k));
 
+const log = (...args) => {
+  if (process.env.LOUD) {
+    console.log(...args);
+  }
+};
 
 module.exports = {
   isPlainObject,
@@ -62,4 +67,5 @@ module.exports = {
   sanitiseEntity,
   mapKeys,
   prefixColNames,
+  log,
 };
