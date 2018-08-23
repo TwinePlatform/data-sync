@@ -22,7 +22,7 @@ const main = (primary, trx) =>
       const res = await trx('outreach_campaign')
         .insert({
           outreach_type_id: trx('outreach_type').select('outreach_type_id').where({ outreach_type_name: c.type }),
-          community_business_id: trx('community_business').select('community_business_id').innerJoin('organisation', 'organisation.organisation_id', 'community_business.organisation_id').where(org),
+          organisation_id: trx('organisation').select('organisation_id').where(org),
         })
         .returning('outreach_campaign_id');
 

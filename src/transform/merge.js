@@ -17,6 +17,7 @@
 const { keys, union } = require('ramda');
 const uuid = require('uuid/v4');
 const EntityFns = require('./entity_matchers');
+const { log } = require('../shared/util');
 
 
 const FKName = (from, to) => `fk_${from}_to_${to}`;
@@ -31,7 +32,7 @@ module.exports = (primary, secondary) => {
   entities.forEach((entity) => {
 
     if (!EntityFns.hasOwnProperty(entity)) {
-      console.log(`No "merge" functions found for ${entity}`);
+      log(`No "merge" functions found for ${entity}`);
       return;
     }
 

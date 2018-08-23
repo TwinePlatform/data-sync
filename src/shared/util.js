@@ -1,5 +1,5 @@
 const {
-  pipe, toPairs, fromPairs, filter, apply, curry, compose, assoc,
+  pipe, toPairs, fromPairs, filter, apply, curry, compose, assoc, trim, map,
 } = require('ramda');
 
 
@@ -30,6 +30,9 @@ const generateAliases = (fieldMap) => {
 // mapKeys :: (k -> a) -> { k: v } -> { a: v }
 const mapKeys = curry((f, o) => Object.keys(o).reduce((acc, k) => assoc(f(k), o[k], acc), {}));
 
+const trimFields = (s) =>
+  typeof s === 'string' ? trim(s) : s;
+
 // stripPrefix :: String -> { k: v } -> { k: v }
 const stripPrefix = (pref) => mapKeys((s) => s.startsWith('fk') ? s : s.replace(`${pref}_`, ''));
 
@@ -38,6 +41,7 @@ const stripId = filterWithKeys((s) => !s.startsWith('id'));
 
 // sanitiseEntity :: String -> { k: v } -> { k: v }
 const sanitiseEntity = (prefix) => compose(
+  map(trimFields),
   stripId,
   stripPrefix(prefix),
 );
@@ -49,6 +53,11 @@ const prefixColNames = mapKeys((k) => ({
   deleted_at: 'organisation.deleted_at',
 }[k] || k));
 
+const log = (...args) => {
+  if (process.env.LOUD) {
+    console.log(...args);
+  }
+};
 
 module.exports = {
   isPlainObject,
@@ -58,4 +67,5 @@ module.exports = {
   sanitiseEntity,
   mapKeys,
   prefixColNames,
+  log,
 };

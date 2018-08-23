@@ -6,7 +6,7 @@
  * - community_business
  */
 const {
-  map, head, filter, compose, pickAll,
+  map, head, filter, compose, pickAll, tryCatch, always,
 } = require('ramda');
 const { sanitiseEntity, mapKeys } = require('../shared/util');
 
@@ -48,6 +48,7 @@ const findOrgById = (id, orgs) => compose(
   filter((o) => o.organisation_id === id), // choose the right organisation
 )(orgs);
 
+const tryFindOrgById = tryCatch(findOrgById, always(null));
 
 const main = (primary, trx) =>
   Promise.all(primary.organisation
@@ -72,5 +73,6 @@ const main = (primary, trx) =>
 
 module.exports = {
   findOrgById,
+  tryFindOrgById,
   main,
 };

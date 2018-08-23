@@ -4,7 +4,7 @@
  * Populates the following tables:
  * - visit
  */
-const { sanitiseEntity } = require('../shared/util');
+const { sanitiseEntity, log } = require('../shared/util');
 const { findVisitActivityById } = require('./visit_activity');
 const { findUserById } = require('./user');
 
@@ -20,8 +20,13 @@ const main = (primary, trx) =>
       const a = findVisitActivityById(v.fk_visit_event_to_visit_activity, primary.visit_activity);
 
       if (Object.keys(u).length === 0) {
-        console.log('Nothing found', v.fk_visit_event_to_user);
-        console.log(v);
+        log('No user found for visit event', v);
+        return Promise.resolve();
+      }
+
+      const res = await trx('user_account').select('user_account_id').where(u);
+      if (res.length === 0) {
+        log('No user found for visit event', v);
         return Promise.resolve();
       }
 

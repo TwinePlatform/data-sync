@@ -8,14 +8,7 @@
  * both source databases (which is just organisations and users)
  */
 const Levenshtein = require('fast-levenshtein');
-
-
-const log = (...args) => {
-  /* istanbul ignore next line */
-  if (process.env.NODE_ENV !== 'test') {
-    console.log(...args);
-  }
-};
+const { log } = require('../shared/util');
 
 
 module.exports = {

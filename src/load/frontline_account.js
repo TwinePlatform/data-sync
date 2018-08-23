@@ -8,8 +8,8 @@
 const {
   compose, omit,
 } = require('ramda');
-const { sanitiseEntity, mapKeys } = require('../shared/util');
-const { findOrgById } = require('./organisation');
+const { sanitiseEntity, mapKeys, log } = require('../shared/util');
+const { tryFindOrgById } = require('./organisation');
 
 
 const sanitiseFrontlineAccount = sanitiseEntity('frontline_account');
@@ -19,12 +19,18 @@ const getFrontlineAccount = compose(
   omit(['fk_frontline_account_to_organisation'])
 );
 
+
 const main = (primary, trx) =>
   Promise.all(primary.frontline_account
     .map(sanitiseFrontlineAccount)
     .map(async (f) => {
       const frontline = getFrontlineAccount(f);
-      const org = findOrgById(f.fk_frontline_account_to_organisation, primary.organisation);
+      const org = tryFindOrgById(f.fk_frontline_account_to_organisation, primary.organisation);
+
+      if (org === null) {
+        log('No organisation found for frontline account', f);
+        return Promise.resolve();
+      }
 
       const res = await trx('frontline_account')
         .insert(frontline)
