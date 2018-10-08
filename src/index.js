@@ -12,6 +12,9 @@ const migrate = async (visitorSourceUrl, adminSourceUrl, targetUrl) => { //eslin
   const adminSource = createClient(adminSourceUrl, 'mysql');
   const targetSink = createClient(targetUrl);
 
+  targetSink
+    .on('query-error', (error, obj) => console.log('error', error, obj));
+
   /*
    * Extract
    */
@@ -43,7 +46,7 @@ const migrate = async (visitorSourceUrl, adminSourceUrl, targetUrl) => { //eslin
     return Load.outreach_campaign(primary, trx);
   });
 
-  return Promise.all([visitorSource.destroy(), adminSource.destroy()]);
+  return Promise.all([visitorSource.destroy(), adminSource.destroy(), targetSink.destroy()]);
 };
 
 module.exports = migrate;

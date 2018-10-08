@@ -16,10 +16,17 @@ const main = (argv) => {
 
   migrate(urls.visitorUrl, urls.adminUrl, urls.targetUrl)
     .then(() => console.log('Migration successful'))
-    .catch(((err) => console.error('Oops!', err)));
+    .catch((err) => console.error('Oops!', err));
 };
 
 
 if (require.main === module) {
+
+  process.on('unhandledRejection', (reason) => {
+    console.error('Unhandled Promise Rejection');
+    console.error(reason);
+    process.exit(1);
+  });
+
   main(process.argv);
 }
