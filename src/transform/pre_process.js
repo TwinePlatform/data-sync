@@ -66,7 +66,7 @@ const replaceKeysWithUUIDs = (entities) => {
  * community business IDs
  */
 const removeTestData = (entities) => {
-  const cb_ids = [1, 2, 3, 4];
+  const cb_ids = [1, 2, 3, 4, 10];
   const propNotInIds = (prop) => (o) => !cb_ids.includes(o[prop]);
 
   const keyNames = {
