@@ -350,6 +350,21 @@ const mapToTargetSchema = (entities) => {
     entities.outreach_meeting = (entities.outreach_meeting || []).concat(om);
   });
 
+  entities.volunteer_log = (entities.volunteer_log || [])
+    .filter((l) => { // Remove duplicate logs
+      const d = l.volunteer_log_started_at;
+
+      if (d.toISOString().startsWith('2018-04-30T22:00:00.000')) {
+        return false;
+      }
+
+      if (d.toISOString().startsWith('2017-12-08T14:39:33.000')) {
+        return false;
+      }
+
+      return true;
+    });
+
   return entities;
 };
 
