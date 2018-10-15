@@ -4,11 +4,12 @@ const adminFieldMap = require('./fieldMap');
 
 
 module.exports = (client) => Promise.all([
-  client.select(client.raw(generateAliases(pickAll(['organisations', 'regions', 'sectors'], adminFieldMap)).join(', ')))
+  client.select(client.raw(generateAliases(pickAll(['organisations', 'regions', 'sectors', 'admin_codes'], adminFieldMap)).join(', ')))
     .from('organisations')
     .leftOuterJoin('sectors', 'sectors.id', 'organisations.sector_id')
     .leftOuterJoin('regions', 'regions.id', 'organisations.region_id')
-    .where({ 'organisations.deleted_at': null }),
+    .leftOuterJoin('admin_codes', 'admin_codes.organisation_id', 'organisations.id')
+    .where({ 'organisations.deleted_at': null, 'admin_codes.deleted_at': null }),
 
   client.select(client.raw(generateAliases(pickAll(['users', 'genders', 'user_roles'], adminFieldMap)).join(', ')))
     .from('users')
