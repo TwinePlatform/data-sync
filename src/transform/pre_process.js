@@ -138,6 +138,16 @@ const mapConstantValues = (entities) => {
     if (org.organisation_sector === 'pub') {
       org.organisation_sector = 'Community pub, shop or café';
     }
+
+    // > Some organisations from the admin app have sector names that are
+    //   changed in the new data model
+    if (org.organisation_sector === 'Environmental or nature conservation') {
+      org.organisation_sector = 'Environment or nature';
+    }
+
+    if (org.organisation_sector === 'Sports and leisure') {
+      org.organisation_sector = 'Sport & leisure';
+    }
   });
 
   entities.user.forEach((user) => {
@@ -227,6 +237,10 @@ const mapToTargetSchema = (entities) => {
 
         if (re.test(org.organisation_name)) {
           org.organisation_region = regionMap[orgRegex];
+        } else {
+          // Default to some region since this column is non-nullable.
+          // This should only really happen for test orgs on the visitor.
+          org.organisation_region = 'South West';
         }
       });
 
