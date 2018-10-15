@@ -245,7 +245,7 @@ const mapToTargetSchema = (entities) => {
       });
 
       if (!org.hasOwnProperty('organisation_region')) {
-        org.organisation_region = null;
+        org.organisation_region = 'South West';
       }
     }
 

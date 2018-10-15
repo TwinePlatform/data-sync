@@ -304,14 +304,14 @@ describe('mapToTargetSchema', () => {
         organisation_name: 'foobar',
         organisation_360_giving_id: null,
         organisation_sector: 'Community hub, facility or space',
-        organisation_region: null,
+        organisation_region: 'South West',
         organisation_created_at: 'now',
       },
       {
         organisation_id: 2,
         organisation_360_giving_id: null,
         organisation_sector: 'Community hub, facility or space',
-        organisation_region: null,
+        organisation_region: 'South West',
         organisation_created_at: 'then',
       },
     ]);
@@ -351,12 +351,12 @@ describe('mapToTargetSchema', () => {
         {
           organisation_name: process.env.DUPLICATED_360_GIVING_ID_ORGANISATION_NAME,
           organisation_360_giving_id: null,
-          organisation_region: null,
+          organisation_region: 'South West',
           organisation_sector: 'Community hub, facility or space',
         },
         {
           organisation_360_giving_id: null,
-          organisation_region: null,
+          organisation_region: 'South West',
           organisation_sector: 'Community hub, facility or space',
         },
       ],
@@ -386,6 +386,7 @@ describe('mapToTargetSchema', () => {
           user_ethnicity: 'prefer not to say',
         },
       ],
+      volunteer_log: [],
     });
   });
 });
