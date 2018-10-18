@@ -21,7 +21,6 @@
  * NOTE: Tables ignored...
  *  - password_resets   = Transient data
  *  - invitations       = Transient data
- *  - admin_codes       = Transient data
  *  - frontlinesms_logs = Retrievable via FrontlineSMS API
  *  - survey_answers    = Retrievable via FrontlineSMS API
  *  - survey_questions  = Retrievable via FrontlineSMS API
@@ -86,10 +85,10 @@ module.exports = {
   },
   activities: {
     name: 'volunteer_log_activity',
-    // OMITTED id         = Unimportant
-    // OMITTED created_at = Unimportant
-    // OMITTED updated_at = Unimportant
-    // OMITTED deleted_at = Unimportant
+    // OMITTED: id         = Unimportant
+    // OMITTED: created_at = Unimportant
+    // OMITTED: updated_at = Unimportant
+    // OMITTED: deleted_at = Unimportant
   },
   logs: {
     id: 'volunteer_log_id',
@@ -125,9 +124,17 @@ module.exports = {
   },
   outreach_child_types: {
     name: 'outreach_campaign_child_type',
-    // OMITTED: created_at = Unimportant
-    // OMITTED: updated_at = Unimportant
-    // OMITTED: deleted_at = Unimportant
+    // OMITTED: created_at  = Unimportant
+    // OMITTED: updated_at  = Unimportant
+    // OMITTED: deleted_at  = Unimportant
     // OMITTED: outreach_id = Unknown meaning
+  },
+  admin_codes: {
+    code: 'admin_code_code',
+    // OMITTED: organisation_id = Handled in JOIN
+    // OMITTED: id              = Unimportant
+    // OMITTED: created_at      = Unimportant
+    // OMITTED: updated_at      = Unimportant
+    // OMITTED: deleted_at      = Unimportant
   },
 };

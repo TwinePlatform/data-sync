@@ -66,7 +66,7 @@ const replaceKeysWithUUIDs = (entities) => {
  * community business IDs
  */
 const removeTestData = (entities) => {
-  const cb_ids = [1, 2, 3, 4];
+  const cb_ids = [1, 2, 3, 4, 10];
   const propNotInIds = (prop) => (o) => !cb_ids.includes(o[prop]);
 
   const keyNames = {
@@ -137,6 +137,16 @@ const mapConstantValues = (entities) => {
     // > Some organisations from the visitor app have bad sector names
     if (org.organisation_sector === 'pub') {
       org.organisation_sector = 'Community pub, shop or café';
+    }
+
+    // > Some organisations from the admin app have sector names that are
+    //   changed in the new data model
+    if (org.organisation_sector === 'Environmental or nature conservation') {
+      org.organisation_sector = 'Environment or nature';
+    }
+
+    if (org.organisation_sector === 'Sports and leisure') {
+      org.organisation_sector = 'Sport & leisure';
     }
   });
 
@@ -227,11 +237,15 @@ const mapToTargetSchema = (entities) => {
 
         if (re.test(org.organisation_name)) {
           org.organisation_region = regionMap[orgRegex];
+        } else {
+          // Default to some region since this column is non-nullable.
+          // This should only really happen for test orgs on the visitor.
+          org.organisation_region = 'South West';
         }
       });
 
       if (!org.hasOwnProperty('organisation_region')) {
-        org.organisation_region = null;
+        org.organisation_region = 'South West';
       }
     }
 
@@ -349,6 +363,21 @@ const mapToTargetSchema = (entities) => {
 
     entities.outreach_meeting = (entities.outreach_meeting || []).concat(om);
   });
+
+  entities.volunteer_log = (entities.volunteer_log || [])
+    .filter((l) => { // Remove duplicate logs
+      const d = l.volunteer_log_started_at;
+
+      if (d.toISOString().startsWith('2018-04-30T22:00:00.000')) {
+        return false;
+      }
+
+      if (d.toISOString().startsWith('2017-12-08T14:39:33.000')) {
+        return false;
+      }
+
+      return true;
+    });
 
   return entities;
 };

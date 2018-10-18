@@ -61,6 +61,11 @@ const main = (primary, trx) =>
         .insert(organisation)
         .returning('organisation_id');
 
+      if (o.admin_code) {
+        await trx('volunteer_admin_code')
+          .insert({ organisation_id: res[0], code: o.admin_code });
+      }
+
       return trx('community_business')
         .insert({
           ...community_business,
