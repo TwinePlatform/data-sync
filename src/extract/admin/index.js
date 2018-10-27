@@ -15,7 +15,8 @@ module.exports = (client) => Promise.all([
     .from('users')
     .leftOuterJoin('genders', 'genders.id', 'users.gender_id')
     .innerJoin('user_roles', 'user_roles.id', 'users.role_id')
-    .where({ 'users.deleted_at': null }),
+    .whereNot({ 'users.password': '' })
+    .andWhere({ 'users.deleted_at': null }),
 
   client.select(client.raw(generateAliases(pickAll(['outreaches', 'outreach_types', 'outreach_child_types', 'meeting_types'], adminFieldMap)).join(', ')))
     .from('outreaches')
