@@ -163,7 +163,7 @@ const mapConstantValues = (entities) => {
           break;
 
         case 'Organisation Admin':
-          user.user_role_name = 'ORG_ADMIN';
+          user.user_role_name = 'CB_ADMIN';
           break;
 
         case 'Volunteer':
@@ -219,7 +219,7 @@ const mapToTargetSchema = (entities) => {
         user_password: org.organisation_password,
         user_created_at: org.organisation_created_at,
         fk_user_to_organisation: org.organisation_id,
-        user_role_name: 'ORG_ADMIN', // By definition, this user is an ORG_ADMIN
+        user_role_name: 'CB_ADMIN', // By definition, this user is a CB_ADMIN
       };
       entities.user.push(user);
       delete org.organisation_email;
