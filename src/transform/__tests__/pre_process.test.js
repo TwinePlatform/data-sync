@@ -242,7 +242,7 @@ describe('mapConstantValues', () => {
       organisation: [],
       user: [
         { user_role_name: 'SYS_ADMIN' },
-        { user_role_name: 'ORG_ADMIN' },
+        { user_role_name: 'CB_ADMIN' },
         { user_role_name: 'VOLUNTEER' },
         { user_role_name: 'VISITOR' },
         { user_role_name: null },
@@ -323,7 +323,7 @@ describe('mapToTargetSchema', () => {
         user_password: 'password',
         user_gender: 'prefer not to say',
         user_created_at: 'now',
-        user_role_name: 'ORG_ADMIN',
+        user_role_name: 'CB_ADMIN',
         user_disability: 'prefer not to say',
         user_ethnicity: 'prefer not to say',
         fk_user_to_organisation: 1,
