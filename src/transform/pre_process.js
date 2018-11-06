@@ -8,7 +8,7 @@
  * "region_map.js". See the function description for more details
  */
 const uuid = require('uuid/v4');
-const { omit } = require('ramda');
+const { omit, evolve } = require('ramda');
 const regionMap = require('./region_map');
 
 
@@ -266,6 +266,11 @@ const mapToTargetSchema = (entities) => {
     // > Organisations coming from the visitor app will not have a 360_giving_id field
     // > Default to null
     org.organisation_360_giving_id = org.organisation_360_giving_id || null;
+
+    // "External workspace" organisations needn't have a turnover band
+    if (org.organisation_name.startsWith('External Workspace')) {
+      org.organisation_turnover_band = null;
+    }
   });
 
 
@@ -378,7 +383,7 @@ const mapToTargetSchema = (entities) => {
 
       return true;
     })
-    .map((l) => ({ ...l, volunteer_log_duration: l.volunteer_log_duration * 60 }));
+    .map(evolve({ volunteer_log_duration: (a) => a * 60, volunteer_log_activity: (a) => a || 'Other' }));
 
   return entities;
 };
