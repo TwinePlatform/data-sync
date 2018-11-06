@@ -7,6 +7,7 @@
  * This module (specifically, mapToTargetSchema) relies on the presence of a git-ignored file
  * "region_map.js". See the function description for more details
  */
+const { randomBytes } = require('crypto');
 const uuid = require('uuid/v4');
 const { omit, evolve } = require('ramda');
 const regionMap = require('./region_map');
@@ -270,6 +271,11 @@ const mapToTargetSchema = (entities) => {
     // "External workspace" organisations needn't have a turnover band
     if (org.organisation_name.startsWith('External Workspace')) {
       org.organisation_turnover_band = null;
+    }
+
+    // Generate admin codes if organisation doesn't already have one
+    if (!org.organisation_admin_code) {
+      org.organisation_admin_code = randomBytes(4).toString('hex');
     }
   });
 
