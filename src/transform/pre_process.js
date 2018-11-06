@@ -372,12 +372,13 @@ const mapToTargetSchema = (entities) => {
         return false;
       }
 
-      if (d.toISOString().startsWith('2017-12-08T14:39:33.000')) {
+      if (/^2017-12-08T\d{2}:39:33/.test(d.toISOString())) {
         return false;
       }
 
       return true;
-    });
+    })
+    .map((l) => ({ ...l, volunteer_log_duration: l.volunteer_log_duration * 60 }));
 
   return entities;
 };
