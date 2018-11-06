@@ -34,6 +34,7 @@ const main = (primary, trx) =>
         .insert({
           user_account_id: trx('user_account').select('user_account_id').where(u),
           visit_activity_id: trx('visit_activity').select('visit_activity_id').where(a),
+          created_at: v.created_at,
         });
     }));
 
