@@ -130,7 +130,7 @@ module.exports = {
     // OMITTED: outreach_id = Unknown meaning
   },
   admin_codes: {
-    code: 'admin_code_code',
+    code: 'organisation_admin_code',
     // OMITTED: organisation_id = Handled in JOIN
     // OMITTED: id              = Unimportant
     // OMITTED: created_at      = Unimportant
