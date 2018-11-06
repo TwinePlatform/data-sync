@@ -27,8 +27,9 @@ module.exports = (client) => Promise.all([
 
   client.select(client.raw(generateAliases(pickAll(['logs', 'activities'], adminFieldMap)).join(', ')))
     .from('logs')
-    .innerJoin('activities', 'activities.id', 'logs.activity_id')
-    .where({ 'logs.deleted_at': null }),
+    .leftOuterJoin('activities', 'activities.id', 'logs.activity_id')
+    .innerJoin('organisations', 'organisations.id', 'logs.organisation_id')
+    .where({ 'logs.deleted_at': null, 'organisations.deleted_at': null }),
 
   client.select(client.raw(generateAliases(pickAll(['frontlinesms_api_keys'], adminFieldMap)).join(', ')))
     .from('frontlinesms_api_keys'),
