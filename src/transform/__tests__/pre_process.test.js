@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { replaceKeysWithUUIDs, mapConstantValues, mapToTargetSchema } = require('../pre_process');
 
 describe('replaceKeysWithUUIDs', () => {
@@ -290,6 +291,7 @@ describe('mapToTargetSchema', () => {
         },
         {
           organisation_id: 2,
+          organisation_name: 'hi',
           organisation_created_at: 'then',
         },
       ],
@@ -299,21 +301,22 @@ describe('mapToTargetSchema', () => {
     const res = mapToTargetSchema(entities);
 
     expect(res.organisation).toEqual([
-      {
+      expect.objectContaining({
         organisation_id: 1,
         organisation_name: 'foobar',
         organisation_360_giving_id: null,
         organisation_sector: 'Community hub, facility or space',
         organisation_region: 'South West',
         organisation_created_at: 'now',
-      },
-      {
+      }),
+      expect.objectContaining({
         organisation_id: 2,
+        organisation_name: 'hi',
         organisation_360_giving_id: null,
         organisation_sector: 'Community hub, facility or space',
         organisation_region: 'South West',
         organisation_created_at: 'then',
-      },
+      }),
     ]);
 
     expect(res.user.map(({ user_id, ...rest }) => rest)).toEqual([
@@ -335,7 +338,7 @@ describe('mapToTargetSchema', () => {
     const entities = {
       organisation: [
         { organisation_name: process.env.DUPLICATED_360_GIVING_ID_ORGANISATION_NAME, organisation_360_giving_id: '0' },
-        { organisation_sector: null },
+        { organisation_name: 'foo', organisation_sector: null },
       ],
       user: [
         { user_phone_number: '1111111111111111111111', user_birth_year: 0 },
@@ -355,11 +358,12 @@ describe('mapToTargetSchema', () => {
           organisation_sector: 'Community hub, facility or space',
         },
         {
+          organisation_name: 'foo',
           organisation_360_giving_id: null,
           organisation_region: 'South West',
           organisation_sector: 'Community hub, facility or space',
         },
-      ],
+      ].map(expect.objectContaining),
       user: [
         {
           user_phone_number: '11111111111111111111',
