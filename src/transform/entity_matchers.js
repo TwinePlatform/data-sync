@@ -34,7 +34,8 @@ module.exports = {
 
   user: {
     doMatch: (a, b) => {
-      if (a.user_email !== null && a.user_email === b.user_email) {
+      if (a.user_email !== null && b.user_email !== null
+        && a.user_email.toLowerCase() === b.user_email.toLowerCase()) {
         log(`Match found: ${a.user_name} with ${b.user_name} on email ${a.user_email}`);
         log(`IDs: ${a.user_id} <><> ${b.user_id}`);
         return true;
