@@ -377,19 +377,22 @@ const mapToTargetSchema = (entities) => {
 
   entities.volunteer_log = (entities.volunteer_log || [])
     .filter((l) => { // Remove duplicate logs
-      const d = l.volunteer_log_started_at instanceof Date
-        ? l.volunteer_log_started_at
-        : new Date();
+      const d = l.volunteer_log_started_at;
+
+      if (!(d instanceof Date)) {
+        return true;
+      }
 
       if (d.toISOString().startsWith('2018-04-30T23:00:00.000')
           && l.volunteer_log_duration === 480
           && l.volunteer_log_updated_at.toISOString().startsWith('2018-08-06T18:33:04')) {
-        
+
         return false;
       }
+
       if (d.toISOString().startsWith('2018-09-06T11:03:13')
           && l.volunteer_log_updated_at.toISOString().startsWith('2018-09-07T10:03:31')) {
-        
+
         return false;
       }
 
