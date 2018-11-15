@@ -377,20 +377,46 @@ const mapToTargetSchema = (entities) => {
 
   entities.volunteer_log = (entities.volunteer_log || [])
     .filter((l) => { // Remove duplicate logs
-      const d = l.volunteer_log_started_at;
+      const d = l.volunteer_log_started_at instanceof Date
+        ? l.volunteer_log_started_at
+        : new Date();
 
-      if (d.toISOString().startsWith('2018-04-30T22:00:00.000')) {
+      if (d.toISOString().startsWith('2018-04-30T23:00:00.000')
+          && l.volunteer_log_duration === 480
+          && l.volunteer_log_updated_at.toISOString().startsWith('2018-08-06T18:33:04')) {
+        
+        return false;
+      }
+      if (d.toISOString().startsWith('2018-09-06T11:03:13')
+          && l.volunteer_log_updated_at.toISOString().startsWith('2018-09-07T10:03:31')) {
+        
         return false;
       }
 
-      if (/^2017-12-08T\d{2}:39:33/.test(d.toISOString())) {
+      if (d.toISOString().startsWith('2017-12-08T')
+        && l.volunteer_log_duration === 420
+        && l.volunteer_log_updated_at.toISOString().startsWith('2017-12-08T15:48:44')
+      ) {
+        return false;
+      }
+
+      if (d.toISOString().startsWith('2018-09-17T15:47:01')
+        && l.volunteer_log_duration === 420
+      ) {
+        // deletes all 3 duplicates but there is no indentifiers
+        return false;
+      }
+
+      if (d.toISOString().startsWith('2018-10-22T20:47:51')
+        && l.volunteer_log_duration === 120
+        && l.volunteer_log_created_at.toISOString().startsWith('2018-10-24T05:20:54')
+      ) {
         return false;
       }
 
       return true;
     })
     .map(evolve({ volunteer_log_duration: (a) => a * 60, volunteer_log_activity: (a) => a || 'Other' }));
-
   return entities;
 };
 
