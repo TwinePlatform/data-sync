@@ -97,7 +97,7 @@ module.exports = {
     duration: 'volunteer_log_duration',
     date_of_log: 'volunteer_log_started_at',
     created_at: 'volunteer_log_created_at',
-    updated_at: 'volunteer_log_updated_at',
+    updated_at: 'volunteer_log_updated_at', // NOT target field - used for matching duplicates
     // OMITTED: activity_id = Handled in JOIN
   },
   frontlinesms_api_keys: {
