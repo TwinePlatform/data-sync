@@ -9,7 +9,7 @@
  */
 const { randomBytes } = require('crypto');
 const uuid = require('uuid/v4');
-const { omit, evolve } = require('ramda');
+const { omit, evolve, equals } = require('ramda');
 const regionMap = require('./region_map');
 
 
@@ -376,21 +376,56 @@ const mapToTargetSchema = (entities) => {
   });
 
   entities.volunteer_log = (entities.volunteer_log || [])
-    .filter((l) => { // Remove duplicate logs
+    .reduce((acc, l) => { // Remove duplicate logs
       const d = l.volunteer_log_started_at;
 
-      if (d.toISOString().startsWith('2018-04-30T22:00:00.000')) {
-        return false;
+      if (!(d instanceof Date)) {
+        return [...acc, l];
       }
 
-      if (/^2017-12-08T\d{2}:39:33/.test(d.toISOString())) {
-        return false;
+      if (d.toISOString().startsWith('2018-04-30T23:00:00.000')
+          && l.volunteer_log_duration === 480
+          && l.volunteer_log_updated_at.toISOString().startsWith('2018-08-06T18:33:04')
+      ) {
+        return acc;
       }
 
-      return true;
-    })
+      if (d.toISOString().startsWith('2018-09-06T11:03:13')
+          && l.volunteer_log_updated_at.toISOString().startsWith('2018-09-07T10:03:31')
+      ) {
+        return acc;
+      }
+
+      if (d.toISOString().startsWith('2017-12-08T')
+        && l.volunteer_log_duration === 420
+        && l.volunteer_log_updated_at.toISOString().startsWith('2017-12-08T15:48:44')
+      ) {
+        return acc;
+      }
+
+      if (d.toISOString().startsWith('2018-09-17T15:47:01')
+        && l.volunteer_log_duration === 420
+      ) {
+        const strippedAcc = acc.map((a) => omit(['volunteer_log_id'], a));
+        const strippedLog = omit(['volunteer_log_id'], l);
+
+        const existingLog = strippedAcc.find((x) => equals(x, strippedLog));
+
+        if (existingLog) {
+          return acc;
+        }
+      }
+
+      if (d.toISOString().startsWith('2018-10-22T20:47:51')
+        && l.volunteer_log_duration === 120
+        && l.volunteer_log_created_at.toISOString().startsWith('2018-10-24T05:20:54')
+      ) {
+        return acc;
+      }
+
+      return [...acc, l];
+    }, [])
     .map(evolve({ volunteer_log_duration: (a) => a * 60, volunteer_log_activity: (a) => a || 'Other' }));
-
   return entities;
 };
 
