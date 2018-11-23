@@ -19,7 +19,7 @@ const main = (primary, trx) =>
       const org = prefixColNames(findOrgById(fk, primary.organisation));
       const user = findUserById(m.fk_outreach_meeting_to_user, primary.user);
 
-      const res = await trx('outreach_campaign')
+      const [outreachCampaignId] = await trx('outreach_campaign')
         .insert({
           outreach_campaign_name: 'Outreach Campaign',
           outreach_type_id: trx('outreach_type').select('outreach_type_id').where({ outreach_type_name: c.type }),
@@ -27,14 +27,27 @@ const main = (primary, trx) =>
         })
         .returning('outreach_campaign_id');
 
-      return trx('outreach_meeting')
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: outreachCampaignId,
+          table_name: 'outreach_campaign',
+        });
+
+      const [outreachMeetingId] = await trx('outreach_meeting')
         .insert({
           user_account_id: trx('user_account').select('user_account_id').where(user),
-          outreach_campaign_id: res[0],
+          outreach_campaign_id: outreachCampaignId,
           outreach_meeting_type_id: trx('outreach_meeting_type').select('outreach_meeting_type_id').where({ outreach_meeting_type_name: m.type }),
           outreach_partner: 'Unknown',
           meeting_subject: 'Unknown',
           scheduled_at: m.scheduled_at,
+        })
+        .returning('outreach_meeting_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: outreachMeetingId,
+          table_name: 'outreach_meeting',
         });
     }));
 

@@ -27,12 +27,19 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      return trx('volunteer_hours_log')
+      const [id] = await trx('volunteer_hours_log')
         .insert({
           ...vlog,
           volunteer_activity_id: trx('volunteer_activity').select('volunteer_activity_id').where({ volunteer_activity_name: l.activity }),
           user_account_id: trx('user_account').select('user_account_id').where(user),
           organisation_id: trx('organisation').select('organisation_id').where(org),
+        })
+        .returning('volunteer_hours_log_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: id,
+          table_name: 'volunteer_hours_log',
         });
     }));
 

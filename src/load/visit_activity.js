@@ -42,12 +42,19 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      return trx('visit_activity')
+      const [id] = await trx('visit_activity')
         .insert({
           ...act,
           organisation_id: trx('organisation')
             .select('organisation_id')
             .where(prefixColNames(org)),
+        })
+        .returning('visit_activity_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: id,
+          table_name: 'visit_activity',
         });
     }));
 
