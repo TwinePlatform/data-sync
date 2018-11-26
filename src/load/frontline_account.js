@@ -32,22 +32,35 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      const res = await trx('frontline_account')
+      const [frontlineId] = await trx('frontline_account')
         .insert(frontline)
         .returning('frontline_account_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: frontlineId,
+          table_name: 'frontline_account',
+        });
 
       // By default set the expiry date to 1 year from now
       const now = new Date();
       now.setFullYear(now.getUTCFullYear() + 1);
 
-      return trx('subscription')
+      const [subscriptionId] = await trx('subscription')
         .insert({
           owner_id: trx('organisation').select('organisation_id').where(org),
           beneficiary_id: trx('organisation').select('organisation_id').where(org),
-          frontline_account_id: res[0],
+          frontline_account_id: frontlineId,
           subscription_status: 'active',
           subscription_type_id: trx('subscription_type').select('subscription_type_id').where({ subscription_type_name: 'community_business:full' }),
           expires_at: now,
+        })
+        .returning('subscription_id');
+
+      return trx('data_sync_log')
+        .insert({
+          foreign_key: subscriptionId,
+          table_name: 'subscription',
         });
     }));
 

@@ -40,7 +40,7 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      const res = await trx('user_account')
+      const [userId] = await trx('user_account')
         .insert({
           ...user,
           gender_id: trx('gender').select('gender_id').where({ gender_name: u.gender }),
@@ -49,11 +49,24 @@ const main = (primary, trx) =>
         })
         .returning('user_account_id');
 
-      return trx('user_account_access_role')
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: userId,
+          table_name: 'user_account',
+        });
+
+      const [userAccessRoleId] = await trx('user_account_access_role')
         .insert({
           organisation_id: trx('organisation').select('organisation_id').where(org),
-          user_account_id: res[0],
+          user_account_id: userId,
           access_role_id: trx('access_role').select('access_role_id').where({ access_role_name: role }),
+        })
+        .returning('user_account_access_role_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: userAccessRoleId,
+          table_name: 'user_account_access_role',
         });
     }));
 

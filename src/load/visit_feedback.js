@@ -15,7 +15,7 @@ const getVisitFeedback = pickAll(['score', 'created_at']);
 const main = (primary, trx) =>
   Promise.all(primary.visit_feedback
     .map(sanitiseVisitFeedback)
-    .map((f) => {
+    .map(async (f) => {
       const fk = f.fk_visit_feedback_to_organisation;
       const feedback = getVisitFeedback(f);
       const org = tryFindOrgById(fk, primary.organisation);
@@ -25,12 +25,19 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      return trx('visit_feedback')
+      const [id] = await trx('visit_feedback')
         .insert({
           ...feedback,
           organisation_id: trx('organisation')
             .select('organisation_id')
             .where(prefixColNames(org)),
+        })
+        .returning('visit_feedback_id');
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: id,
+          table_name: 'visit_feedback',
         });
     }));
 

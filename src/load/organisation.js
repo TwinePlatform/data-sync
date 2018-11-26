@@ -57,14 +57,20 @@ const main = (primary, trx) =>
       const organisation = getOrg(o);
       const { coordinates, ...community_business } = getCommunityBusiness(o);
 
-      const res = await trx('organisation')
+      const [orgId] = await trx('organisation')
         .insert(organisation)
         .returning('organisation_id');
 
       if (o.admin_code) {
         await trx('volunteer_admin_code')
-          .insert({ organisation_id: res[0], code: o.admin_code });
+          .insert({ organisation_id: orgId, code: o.admin_code });
       }
+
+      await trx('data_sync_log')
+        .insert({
+          foreign_key: orgId,
+          table_name: 'organisation',
+        });
 
       return trx('community_business')
         .insert({
@@ -72,8 +78,9 @@ const main = (primary, trx) =>
           coordinates: coordinates ? trx.raw(`ST_GeogFromText('SRID=4326;POINT(${coordinates.lng} ${coordinates.lat})')`) : null,
           community_business_region_id: trx('community_business_region').select('community_business_region_id').where({ region_name: o.region }),
           community_business_sector_id: trx('community_business_sector').select('community_business_sector_id').where({ sector_name: o.sector }),
-          organisation_id: res[0],
+          organisation_id: orgId,
         });
+      // cb entry not added to data_sync_log as it uses organisation_id as serial
     }));
 
 module.exports = {
