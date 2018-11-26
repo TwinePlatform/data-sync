@@ -30,18 +30,18 @@ const main = (primary, trx) =>
         return Promise.resolve();
       }
 
-      const [id] = await trx('visit')
+      const [id] = await trx('visit_log')
         .insert({
           user_account_id: trx('user_account').select('user_account_id').where(u),
           visit_activity_id: trx('visit_activity').select('visit_activity_id').where(a),
           created_at: v.created_at,
         })
-        .returning('visit_id');
+        .returning('visit_log_id');
 
       await trx('data_sync_log')
         .insert({
           foreign_key: id,
-          table_name: 'visit',
+          table_name: 'visit_log',
         });
     }));
 
