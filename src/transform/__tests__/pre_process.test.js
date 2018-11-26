@@ -203,28 +203,6 @@ describe('mapConstantValues', () => {
     });
   });
 
-  test('maps bad organisation sector to required value', () => {
-    const entities = {
-      organisation: [
-        { organisation_sector: 'pub' },
-        { organisation_sector: 'Other' },
-        { organisation_sector: null },
-      ],
-      user: [],
-    };
-
-    const res = mapConstantValues(entities);
-
-    expect(res).toEqual({
-      organisation: [
-        { organisation_sector: 'Community pub, shop or café' },
-        { organisation_sector: 'Other' },
-        { organisation_sector: null },
-      ],
-      user: [],
-    });
-  });
-
   test('maps user roles to required values', () => {
     const entities = {
       organisation: [],
@@ -243,9 +221,9 @@ describe('mapConstantValues', () => {
       organisation: [],
       user: [
         { user_role_name: 'SYS_ADMIN' },
-        { user_role_name: 'CB_ADMIN' },
+        { user_role_name: 'VOLUNTEER_ADMIN' },
         { user_role_name: 'VOLUNTEER' },
-        { user_role_name: 'VISITOR' },
+        { user_role_name: 'foo' },
         { user_role_name: null },
       ],
     });

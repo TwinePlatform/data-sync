@@ -85,8 +85,12 @@ const removeTestData = (entities) => {
 
   // Additional filtering on visit_event records
   entities.visit_event = entities.visit_event
-    .filter((e) => e.visit_event_id !== 155) // Ignored: visit to real CB made by test account
-    .map(omit(['fk_visit_event_to_organisation'])); // filter out foreign key b/c not part of new data model
+    // Ignored: visit to real CB made by test account
+    .filter((e) => e.visit_event_id !== 155)
+    // Ignored: visits from test orgs
+    .filter((e) => ![1, 2, 3, 4, 10].includes(e.fk_visit_event_to_organisation))
+    // filter out foreign key b/c not part of new data model
+    .map(omit(['fk_visit_event_to_organisation']));
 
   return entities;
 };
@@ -103,7 +107,7 @@ const removeTestData = (entities) => {
  */
 const mapConstantValues = (entities) => {
   entities.organisation.forEach((org) => {
-    // Turnover band mapping:
+    // Turnover band mapping for volunteer app:
     // > This is just to make the use of "£", "k" and "m" consistent
     switch (org.organisation_turnover_band) {
       case '£100-250k':
@@ -134,12 +138,6 @@ const mapConstantValues = (entities) => {
         break;
     }
 
-    // Organisations with bad sector names
-    // > Some organisations from the visitor app have bad sector names
-    if (org.organisation_sector === 'pub') {
-      org.organisation_sector = 'Community pub, shop or café';
-    }
-
     // > Some organisations from the admin app have sector names that are
     //   changed in the new data model
     if (org.organisation_sector === 'Environmental or nature conservation') {
@@ -155,8 +153,6 @@ const mapConstantValues = (entities) => {
     // User role mapping
     // > Users coming from the admin app have role names corresponding directly to
     //   roles in the new data model
-    // > Users coming from the visitor app have no role names but are all by definition
-    //   visitors
     if (typeof user.user_role_name === 'string') {
       switch (user.user_role_name) {
         case 'System Admin':
@@ -164,7 +160,7 @@ const mapConstantValues = (entities) => {
           break;
 
         case 'Organisation Admin':
-          user.user_role_name = 'CB_ADMIN';
+          user.user_role_name = 'VOLUNTEER_ADMIN';
           break;
 
         case 'Volunteer':
@@ -172,7 +168,7 @@ const mapConstantValues = (entities) => {
           break;
 
         default:
-          user.user_role_name = 'VISITOR';
+          console.log('WARNING: uncaught user');
           break;
       }
     }
