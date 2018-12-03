@@ -28,6 +28,10 @@ ANONYMOUS_USERS_MASTER_ID =
 # There is a duplicate 360 Giving ID in the database, corresponding to duplicate records of
 # a single organisaiton. Duplicate 360 Giving IDs are not permitted in the new data model
 DUPLICATED_360_GIVING_ID_ORGANISATION_NAME = ...
+
+# Add comma separated list of user emails from the volunteer app that should be added as
+# CB_ADMIN
+CB_ADMIN_EMAILS= ...
 ```
 
 ## Running

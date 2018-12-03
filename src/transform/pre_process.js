@@ -154,13 +154,19 @@ const mapConstantValues = (entities) => {
     // > Users coming from the admin app have role names corresponding directly to
     //   roles in the new data model
     if (typeof user.user_role_name === 'string') {
+      const cbAdmins = process.env.CB_ADMIN_EMAILS.split(',').map((x) => x.toLowerCase());
+
       switch (user.user_role_name) {
         case 'System Admin':
           user.user_role_name = 'SYS_ADMIN';
           break;
 
         case 'Organisation Admin':
-          user.user_role_name = 'VOLUNTEER_ADMIN';
+          if (cbAdmins.includes(user.user_email.toLowerCase())) {
+            user.user_role_name = 'CB_ADMIN';
+          } else {
+            user.user_role_name = 'VOLUNTEER_ADMIN';
+          }
           break;
 
         case 'Volunteer':
