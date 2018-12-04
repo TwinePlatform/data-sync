@@ -42,6 +42,12 @@ module.exports = {
       }
       return false;
     },
+
+    merge: (a, b) => {
+      const merged = Object.assign(a, b);
+      merged.user_role_name = [a.user_role_name, b.user_role_name].filter(Boolean);
+      return merged;
+    },
   },
 
   visit_event: {

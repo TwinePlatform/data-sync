@@ -97,7 +97,11 @@ module.exports = (primary, secondary) => {
             }
 
             // Merge
-            Object.assign(eP, eS);
+            if (EntityFns[entity].hasOwnProperty('merge')) {
+              EntityFns[entity].merge(eP, eS);
+            } else {
+              Object.assign(eP, eS);
+            }
             isMerged = true;
           }
         }
