@@ -207,11 +207,11 @@ describe('mapConstantValues', () => {
     const entities = {
       organisation: [],
       user: [
-        { user_role_name: 'System Admin' },
-        { user_role_name: 'Organisation Admin' },
-        { user_role_name: 'Volunteer' },
-        { user_role_name: 'foo' },
-        { user_role_name: null },
+        { user_role_names: 'System Admin' },
+        { user_role_names: 'Organisation Admin', user_email: '' },
+        { user_role_names: 'Volunteer' },
+        { user_role_names: 'foo' },
+        { user_role_names: null },
       ],
     };
 
@@ -220,11 +220,11 @@ describe('mapConstantValues', () => {
     expect(res).toEqual({
       organisation: [],
       user: [
-        { user_role_name: 'SYS_ADMIN' },
-        { user_role_name: 'VOLUNTEER_ADMIN' },
-        { user_role_name: 'VOLUNTEER' },
-        { user_role_name: 'foo' },
-        { user_role_name: null },
+        { user_role_names: ['SYS_ADMIN'] },
+        { user_role_names: ['VOLUNTEER_ADMIN'], user_email: '' },
+        { user_role_names: ['VOLUNTEER'] },
+        { user_role_names: 'foo' },
+        { user_role_names: null },
       ],
     });
   });
@@ -304,7 +304,7 @@ describe('mapToTargetSchema', () => {
         user_password: 'password',
         user_gender: 'prefer not to say',
         user_created_at: 'now',
-        user_role_name: 'CB_ADMIN',
+        user_role_names: ['CB_ADMIN'],
         user_disability: 'prefer not to say',
         user_ethnicity: 'prefer not to say',
         fk_user_to_organisation: 1,
@@ -347,7 +347,7 @@ describe('mapToTargetSchema', () => {
           user_phone_number: '11111111111111111111',
           user_birth_year: null,
           user_gender: 'prefer not to say',
-          user_role_name: 'VISITOR',
+          user_role_names: ['VISITOR'],
           user_disability: 'prefer not to say',
           user_ethnicity: 'prefer not to say',
         },
@@ -355,7 +355,7 @@ describe('mapToTargetSchema', () => {
           user_id: 0,
           user_email: null,
           user_gender: 'prefer not to say',
-          user_role_name: 'VISITOR',
+          user_role_names: ['VISITOR'],
           user_disability: 'prefer not to say',
           user_ethnicity: 'prefer not to say',
         },
@@ -363,12 +363,13 @@ describe('mapToTargetSchema', () => {
           user_name: 'random visitor',
           user_email: null,
           user_gender: 'prefer not to say',
-          user_role_name: 'VISITOR',
+          user_role_names: ['VISITOR'],
           user_disability: 'prefer not to say',
           user_ethnicity: 'prefer not to say',
         },
       ],
       volunteer_log: [],
+      visit_event: [],
     });
   });
 });

@@ -54,7 +54,11 @@ describe('Merge', () => {
         ],
 
         user: [
-          { user_name: 'foo', user_email: 'foo@bar.com' },
+          {
+            user_name: 'foo',
+            user_email: 'foo@bar.com',
+            user_role_names: [],
+          },
         ],
       },
       right: {
@@ -64,7 +68,11 @@ describe('Merge', () => {
         ],
 
         user: [
-          { user_name: 'Foo', user_email: 'foo@bar.com' },
+          {
+            user_name: 'Foo',
+            user_email: 'foo@bar.com',
+            user_role_names: [],
+          },
         ],
       },
       expectation: {
@@ -74,7 +82,11 @@ describe('Merge', () => {
         ],
 
         user: [
-          { user_name: 'Foo', user_email: 'foo@bar.com' },
+          {
+            user_name: 'Foo',
+            user_email: 'foo@bar.com',
+            user_role_names: [],
+          },
         ],
       },
     },
@@ -138,19 +150,33 @@ describe('Merge', () => {
       name: 'Merges duplicate user records without losing properties',
       left: {
         user: [
-          { user_name: 'Ted', user_email: 'N1', user_is_email_confirmed: true },
+          {
+            user_name: 'Ted',
+            user_email: 'N1',
+            user_is_email_confirmed: true,
+            user_role_names: ['one'],
+          },
         ],
 
       },
       right: {
         user: [
-          { user_name: 'Ted', user_email: 'N1', user_api_key: 'foo' },
+          {
+            user_name: 'Ted',
+            user_email: 'N1',
+            user_api_key: 'foo',
+            user_role_names: ['one'],
+          },
         ],
       },
       expectation: {
         user: [
           {
-            user_name: 'Ted', user_api_key: 'foo', user_email: 'N1', user_is_email_confirmed: true,
+            user_name: 'Ted',
+            user_api_key: 'foo',
+            user_email: 'N1',
+            user_is_email_confirmed: true,
+            user_role_names: ['one'],
           },
         ],
       },
@@ -169,7 +195,12 @@ describe('Merge', () => {
 
       user: [
         {
-          user_name: 'Ted', user_email: 'ted@foo.com', user_is_email_confirmed: true, fk_user_to_organisation: 1,
+
+          user_name: 'Ted',
+          user_email: 'ted@foo.com',
+          user_is_email_confirmed: true,
+          fk_user_to_organisation: 1,
+          user_role_names: ['one'],
         },
       ],
 
@@ -181,7 +212,12 @@ describe('Merge', () => {
 
       user: [
         {
-          user_name: 'Ted', user_email: 'ted@foo.com', user_api_key: 'foo', fk_user_to_organisation: 3,
+
+          user_name: 'Ted',
+          user_email: 'ted@foo.com',
+          user_api_key: 'foo',
+          fk_user_to_organisation: 3,
+          user_role_names: [],
         },
       ],
     };
@@ -203,7 +239,12 @@ describe('Merge', () => {
 
       user: [
         {
-          user_id: 1, user_name: 'Ted', user_email: 'ted@foo.com', user_is_email_confirmed: true, fk_user_to_organisation: 1,
+          user_id: 1,
+          user_name: 'Ted',
+          user_email: 'ted@foo.com',
+          user_is_email_confirmed: true,
+          fk_user_to_organisation: 1,
+          user_role_names: [],
         },
       ],
 
@@ -215,7 +256,12 @@ describe('Merge', () => {
 
       user: [
         {
-          user_id: 1, user_name: 'Ted', user_email: 'ted@foo.com', user_api_key: 'foo', fk_user_to_organisation: 3,
+          user_id: 1,
+          user_name: 'Ted',
+          user_email: 'ted@foo.com',
+          user_api_key: 'foo',
+          fk_user_to_organisation: 3,
+          user_role_names: [],
         },
       ],
 

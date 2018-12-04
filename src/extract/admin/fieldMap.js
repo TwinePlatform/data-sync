@@ -78,7 +78,7 @@ module.exports = {
     // OMITTED: status         = Unused
   },
   user_roles: {
-    name: 'user_role_name',
+    name: 'user_role_names',
   },
   meeting_types: {
     name: 'outreach_campaign_interaction_type',

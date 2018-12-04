@@ -153,24 +153,26 @@ const mapConstantValues = (entities) => {
     // User role mapping
     // > Users coming from the admin app have role names corresponding directly to
     //   roles in the new data model
-    if (typeof user.user_role_name === 'string') {
+
+    if (typeof user.user_role_names === 'string') {
       const cbAdmins = process.env.CB_ADMIN_EMAILS.split(',').map((x) => x.toLowerCase());
 
-      switch (user.user_role_name) {
+      switch (user.user_role_names) {
         case 'System Admin':
-          user.user_role_name = 'SYS_ADMIN';
+          user.user_role_names = ['SYS_ADMIN'];
           break;
 
         case 'Organisation Admin':
           if (cbAdmins.includes(user.user_email.toLowerCase())) {
-            user.user_role_name = 'CB_ADMIN';
+            user.user_role_names = ['CB_ADMIN', 'VOLUNTEER_ADMIN'];
           } else {
-            user.user_role_name = 'VOLUNTEER_ADMIN';
+            user.user_role_names = ['VOLUNTEER_ADMIN'];
           }
           break;
 
         case 'Volunteer':
-          user.user_role_name = 'VOLUNTEER';
+
+          user.user_role_names = ['VOLUNTEER'];
           break;
 
         default:
@@ -222,7 +224,7 @@ const mapToTargetSchema = (entities) => {
         user_password: org.organisation_password,
         user_created_at: org.organisation_created_at,
         fk_user_to_organisation: org.organisation_id,
-        user_role_name: 'CB_ADMIN', // By definition, this user is a CB_ADMIN
+        user_role_names: ['CB_ADMIN'], // By definition, this user is a CB_ADMIN
       };
       entities.user.push(user);
       delete org.organisation_email;
@@ -286,8 +288,9 @@ const mapToTargetSchema = (entities) => {
     // User role names
     // > Users from the visitor app do not have a role assigned to them
     // > They are all visitors, except those already marked as CB_ADMINs above
-    if (!user.hasOwnProperty('user_role_name')) {
-      user.user_role_name = 'VISITOR';
+    if (!user.hasOwnProperty('user_role_names')) {
+
+      user.user_role_names = ['VISITOR'];
     }
 
     // User gender
@@ -336,6 +339,10 @@ const mapToTargetSchema = (entities) => {
     // > E-mails for test accounts are re-used and can safely be set to null
     if (user.user_email === 'twinesocialbizintel@gmail.com' && user.user_name === 'random visitor') {
       user.user_email = null;
+    }
+
+    if (user.user_password) {
+      user.user_password = user.user_password.replace('$2y$', '$2a$');
     }
   });
 
@@ -428,6 +435,19 @@ const mapToTargetSchema = (entities) => {
       return [...acc, l];
     }, [])
     .map(evolve({ volunteer_log_duration: (a) => a * 60, volunteer_log_activity: (a) => a || 'Other' }));
+
+  entities.visit_event = (entities.visit_event || []).filter((v) => {
+    const d = v.visit_event_created_at;
+
+    if (d.toISOString().startsWith('2018-07-26T11:18:37')
+      || d.toISOString().startsWith('2018-07-26T15:59:43')
+      || d.toISOString().startsWith('2018-06-22T10:34:29')
+    ) {
+      return false;
+    }
+    return true;
+  });
+
   return entities;
 };
 
