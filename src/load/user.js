@@ -16,7 +16,7 @@ const sanitiseUser = sanitiseEntity('user');
 
 const getUser = compose(
   mapKeys((k) => ({ password: 'user_password', name: 'user_name' }[k] || k)),
-  omit(['role_name', 'gender', 'disability', 'ethnicity', 'fk_user_to_organisation'])
+  omit(['role_names', 'gender', 'disability', 'ethnicity', 'fk_user_to_organisation'])
 );
 
 const findUserById = (id, users) => compose(
@@ -31,7 +31,8 @@ const main = (primary, trx) =>
   Promise.all(primary.user
     .map(sanitiseUser)
     .map(async (u) => {
-      const role = u.role_name;
+      const roles = u.role_names;
+
       const user = getUser(u);
       const org = tryFindOrgById(u.fk_user_to_organisation, primary.organisation);
 
@@ -55,19 +56,21 @@ const main = (primary, trx) =>
           table_name: 'user_account',
         });
 
-      const [userAccessRoleId] = await trx('user_account_access_role')
-        .insert({
-          organisation_id: trx('organisation').select('organisation_id').where(org),
-          user_account_id: userId,
-          access_role_id: trx('access_role').select('access_role_id').where({ access_role_name: role }),
-        })
-        .returning('user_account_access_role_id');
+      const userAccessRoleIds = await Promise.all(roles.map((role) =>
+        trx('user_account_access_role')
+          .insert({
+            organisation_id: trx('organisation').select('organisation_id').where(org),
+            user_account_id: userId,
+            access_role_id: trx('access_role').select('access_role_id').where({ access_role_name: role }),
+          })
+          .returning('user_account_access_role_id')));
 
-      await trx('data_sync_log')
-        .insert({
-          foreign_key: userAccessRoleId,
-          table_name: 'user_account_access_role',
-        });
+      return Promise.all(userAccessRoleIds.map(([id]) =>
+        trx('data_sync_log')
+          .insert({
+            foreign_key: id,
+            table_name: 'user_account_access_role',
+          })));
     }));
 
 

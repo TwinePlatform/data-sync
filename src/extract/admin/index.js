@@ -16,6 +16,7 @@ module.exports = (client) => Promise.all([
     .leftOuterJoin('genders', 'genders.id', 'users.gender_id')
     .innerJoin('user_roles', 'user_roles.id', 'users.role_id')
     .whereNot({ 'users.password': '' })
+    .whereNot({ 'user_roles.id': 3 })
     .andWhere({ 'users.deleted_at': null }),
 
   client.select(client.raw(generateAliases(pickAll(['outreaches', 'outreach_types', 'outreach_child_types', 'meeting_types'], adminFieldMap)).join(', ')))
@@ -29,7 +30,10 @@ module.exports = (client) => Promise.all([
     .from('logs')
     .leftOuterJoin('activities', 'activities.id', 'logs.activity_id')
     .innerJoin('organisations', 'organisations.id', 'logs.organisation_id')
-    .where({ 'logs.deleted_at': null, 'organisations.deleted_at': null }),
+    .innerJoin('users', 'users.id', 'logs.user_id')
+    .innerJoin('user_roles', 'user_roles.id', 'users.role_id')
+    .where({ 'logs.deleted_at': null, 'organisations.deleted_at': null })
+    .whereNot({ 'users.role_id': 3 }),
 
   client.select(client.raw(generateAliases(pickAll(['frontlinesms_api_keys'], adminFieldMap)).join(', ')))
     .from('frontlinesms_api_keys'),

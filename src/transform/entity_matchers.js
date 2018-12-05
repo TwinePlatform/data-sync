@@ -9,6 +9,7 @@
  */
 const Levenshtein = require('fast-levenshtein');
 const { log } = require('../shared/util');
+const { omit } = require('ramda');
 
 
 module.exports = {
@@ -41,6 +42,37 @@ module.exports = {
         return true;
       }
       return false;
+    },
+
+    merge: (a, b) => {
+      let roles = a.user_role_names.concat(b.user_role_names)
+        .filter((x, i, s) => s.indexOf(x) >= i);
+
+      Object.assign(a, omit(['user_role_names'], a), omit(['user_role_names'], b));
+
+      if (
+        roles.includes('CB_ADMIN')
+        && roles.includes('VOLUNTEER')
+      ) {
+        roles = ['CB_ADMIN', 'VOLUNTEER_ADMIN'];
+      }
+
+      if (
+        roles.includes('VOLUNTEER_ADMIN')
+        && roles.includes('VOLUNTEER')
+      ) {
+        roles = ['VOLUNTEER_ADMIN'];
+      }
+
+      if (
+        roles.includes('CB_ADMIN')
+        && roles.includes('VISITOR')
+      ) {
+        roles = ['CB_ADMIN'];
+      }
+
+      a.user_role_names = roles;
+
     },
   },
 
