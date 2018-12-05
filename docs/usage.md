@@ -32,6 +32,9 @@ DUPLICATED_360_GIVING_ID_ORGANISATION_NAME = ...
 # Add comma separated list of user emails from the volunteer app that should be added as
 # CB_ADMIN
 CB_ADMIN_EMAILS= ...
+
+# Add list of matching orgs, separated as key value pairs querystring style
+MATCHING_ORGS= one=two&...
 ```
 
 ## Running
