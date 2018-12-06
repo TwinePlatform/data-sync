@@ -17,7 +17,8 @@
     "url": "https://github.com/TwinePlatform/data-sync/issues"
   },
   "jest": {
-    "coverageDirectory": "./coverage"
+    "coverageDirectory": "./coverage",
+    "globalSetup": "<rootDir>/jest.global_setup.js"
   },
   "homepage": "https://github.com/TwinePlatform/data-sync#readme",
   "dependencies": {

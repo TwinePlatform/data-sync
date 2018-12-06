@@ -24,6 +24,15 @@ module.exports = {
         b.organisation_name.toLowerCase()
       );
 
+      const matchingOrgs = process.env.MATCHING_ORGS.split('&').map((x) => x.split('='));
+      for (let i = 0; i < matchingOrgs.length; i++) {
+        if (
+          matchingOrgs[i].includes(a.organisation_name)
+          && matchingOrgs[i].includes(b.organisation_name)) {
+          return true;
+        }
+      }
+
       if (distance < 3) {
         log(`Match found: ${a.organisation_name} with ${b.organisation_name}`);
         log(`Edit distance: ${distance}`);

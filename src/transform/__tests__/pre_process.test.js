@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { replaceKeysWithUUIDs, mapConstantValues, mapToTargetSchema } = require('../pre_process');
 
 describe('replaceKeysWithUUIDs', () => {
