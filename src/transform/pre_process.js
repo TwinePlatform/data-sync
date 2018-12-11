@@ -281,6 +281,11 @@ const mapToTargetSchema = (entities) => {
     if (!org.organisation_admin_code) {
       org.organisation_admin_code = randomBytes(4).toString('hex');
     }
+
+    // Fix inconsistent casing on extra workspace organisations
+    if (/^extra workspace/i.test(org.organisation_name)) {
+      org.organisation_name = org.organisation_name.replace('workspace', 'Workspace');
+    }
   });
 
 
